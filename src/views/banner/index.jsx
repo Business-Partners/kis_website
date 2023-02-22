@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 
 function Banner() {
   return (
-    <BannerTag>
+    <BannerTag id="#">
       <div>
         <h1> Kindergarten Integrated System </h1>
         <strong>

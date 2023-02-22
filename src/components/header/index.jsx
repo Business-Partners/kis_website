@@ -13,7 +13,7 @@ function Header() {
       <nav>
         <ul>
           <li>
-            <Link to="/"> Kis App </Link>
+            <a href="/#"> Kis App </a>
             <ul>
               <li>
                 <Link to="/"> KIS Dektop </Link>

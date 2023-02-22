@@ -1,9 +1,79 @@
-import { PriceContainer } from "./styles";
+import { PriceCard, PriceContainer } from "./styles";
+import { ContainerHeading } from "../styles";
+import { Link } from "react-router-dom";
 
 function Prices() {
   return (
     <PriceContainer id="prices">
-      <h1> Preços </h1>
+      <ContainerHeading type="white"> Preços </ContainerHeading>
+
+      <ul>
+        <PriceCard>
+          <div>
+            <strong> Básico </strong>
+
+            <h3>
+              25.000,00 <span> Kzs </span>
+            </h3>
+
+            <p> por mês </p>
+          </div>
+
+          <ul>
+            <li> 10 GB Em Disco </li>
+            <li> 10+ Funcionários </li>
+            <li> 15+ Crianças </li>
+            <li> 5+ Turmas </li>
+            <li> App Desktop </li>
+          </ul>
+
+          <Link to="/buy"> Escolher o Plano </Link>
+        </PriceCard>
+
+        <PriceCard>
+          <div>
+            <strong> Básico </strong>
+
+            <h3>
+              25.000,00 <span> Kzs </span>
+            </h3>
+
+            <p> por mês </p>
+          </div>
+
+          <ul>
+            <li> 10 GB Em Disco </li>
+            <li> 10+ Funcionários </li>
+            <li> 15+ Crianças </li>
+            <li> 5+ Turmas </li>
+            <li> App Desktop </li>
+          </ul>
+
+          <Link to="/buy"> Escolher o Plano </Link>
+        </PriceCard>
+
+        <PriceCard>
+          <div>
+            <strong> Básico </strong>
+
+            <h3>
+              25.000,00 <span> Kzs </span>
+            </h3>
+
+            <p> por mês </p>
+          </div>
+
+          <ul>
+            <li> 10 GB Em Disco </li>
+            <li> 10+ Funcionários </li>
+            <li> 15+ Crianças </li>
+            <li> 5+ Turmas </li>
+            <li> App Desktop </li>
+          </ul>
+
+          <Link to="/buy"> Escolher o Plano </Link>
+        </PriceCard>
+      </ul>
     </PriceContainer>
   );
 }
