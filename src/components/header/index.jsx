@@ -39,7 +39,7 @@ function Header() {
       </nav>
 
       <div>
-        <Link to="/buy"> Comprar </Link>
+        <Link to="/getStarted"> Comprar </Link>
       </div>
     </HeaderTag>
   );

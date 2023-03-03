@@ -1,13 +1,13 @@
-import React, { useEffect, useState } from "react";
+import { AxiosError, AxiosResponse } from "axios";
+import React, { useState } from "react";
 import { toast } from "react-hot-toast";
 import { useNavigate, useParams } from "react-router-dom";
+import { api } from "../../../services/api";
 import WelcomeHeader from "../components/welcomeHeader";
 import { loginSchema } from "../schemas";
 import Styles from "../styles/index.module.scss";
-import { LoginData } from "./types";
-import { api } from "../../../services/api";
-import { AxiosError, AxiosResponse } from "axios";
 import FinalWrappers from "./finalWrappers";
+import { LoginData } from "./types";
 
 const InstitutionLoginData: React.FC = () => {
   const { institutionId } = useParams();
@@ -53,7 +53,8 @@ const InstitutionLoginData: React.FC = () => {
         }, 3000);
       })
       .catch((err: AxiosError) => {
-        toast.error(err.response?.data.message);
+        toast.error(err?.response?.data.message);
+        console.log(err);
       });
   };
 
