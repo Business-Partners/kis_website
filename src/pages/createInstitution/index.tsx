@@ -15,11 +15,6 @@ const Welcome: React.FC = () => {
           <Routes>
             <Route path="/" element={<WelcomeInitialPage />} />
             <Route path="/createInstitution" element={<CreateInstitution />} />
-            <Route
-              path="/createInstitution/:institutionId"
-              element={<InstitutionLoginData />}
-            />
-            <Route path="/createInstitution/keep" element={<KeepRegister />} />
             <Route path="*" element={<Navigate to="/getStarted" />} />
           </Routes>
         </div>
