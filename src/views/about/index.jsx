@@ -1,5 +1,5 @@
-import { AboutContainer } from "./styles";
 import { ContainerHeading } from "../styles";
+import { AboutContainer } from "./styles";
 
 function About() {
   return (
