@@ -12,9 +12,6 @@ const WelcomeInitialPage: React.FC = () => {
       <div className="buttonsContainer">
         <Link to="/getStarted/createInstitution">Começar</Link>
         <Link to="/docs">Documentação</Link>
-        <Link to="/getStarted/createInstitution/keep">
-          Adicionar Dados de Login
-        </Link>
       </div>
       <footer className="initialPageFooter">
         <u>Termos e Políticas de Privacidade</u>

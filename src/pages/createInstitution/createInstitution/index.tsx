@@ -1,25 +1,29 @@
+import { yupResolver } from "@hookform/resolvers/yup";
 import { AxiosError, AxiosResponse } from "axios";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import { useForm } from "react-hook-form";
 import { toast } from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
+import * as Yup from "yup";
 import { api } from "../../../services/api";
 import WelcomeHeader from "../components/welcomeHeader";
 import { useGetContactTypes } from "../hooks/getTypeContact";
-import { addressSchema, institutionDataSchema } from "../schemas";
+import { schema } from "../schemas";
 import Styles from "../styles/index.module.scss";
+import FinalWrappers from "./finalWrappers";
 import {
-  Contacts,
   InstitutionAddress,
   InstitutionContact,
   InstitutionData,
   InstitutionSize,
 } from "./types";
+type FormData = Yup.InferType<typeof schema>;
 
 const CreateInstitution: React.FC = () => {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
+  const [openFinalWrapper, setOpenFinalWrapper] = useState(false);
   const [typeContactTelefone, typeContactEmail] = useGetContactTypes();
-  const [contacts, setContacts] = useState<Contacts>({} as Contacts);
   const [institutionContacts, setInstitutionContacts] = useState<
     InstitutionContact[]
   >([]);
@@ -28,40 +32,51 @@ const CreateInstitution: React.FC = () => {
   );
   const [institutionAddress, setInstituionAddress] =
     useState<InstitutionAddress>({} as InstitutionAddress);
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<FormData>({
+    resolver: yupResolver(schema),
+  });
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
+  const onSubmit = (data: FormData) => {
     setLoading(true);
     setInstitutionContacts([
       {
-        content: contacts.phone,
-        contactTypeId: typeContactTelefone?.id,
-      },
-      {
-        content: contacts.alternativePhone,
-        contactTypeId: typeContactTelefone?.id,
-      },
-      {
-        content: contacts.email,
+        content: data.email,
         contactTypeId: typeContactEmail?.id,
+      },
+      {
+        content: data.phone,
+        contactTypeId: typeContactTelefone?.id,
+      },
+      {
+        content: data.altPhone,
+        contactTypeId: typeContactTelefone?.id,
       },
     ]);
 
-    ValidateFields().then((res) => {
-      if (res === false) toast.error("Preencha Corretamente os Campos!");
-      else {
-        CreateInstitution();
-      }
+    setInstituionAddress({
+      address: data.address,
+      county: data.county,
+      country: data.country,
+      province: data.province,
+      state: data.state,
+      neighborhood: data.neighborhood,
+    });
+
+    setInstitutionData({
+      name: data.name,
+      nifNumber: data.nifNumber,
+      description: data.description,
+      size: data.size,
     });
   };
 
-  const ValidateFields = async () => {
-    const validateData = await institutionDataSchema.isValid(institutionData);
-
-    const validateAddress = await addressSchema.isValid(institutionAddress);
-
-    return validateData && validateAddress;
-  };
+  useEffect(() => {
+    if (institutionData.name) CreateInstitution();
+  }, [institutionData]);
 
   const CreateInstitution = async () => {
     await api
@@ -74,254 +89,154 @@ const CreateInstitution: React.FC = () => {
         console.log(res);
         toast.success("Instituição criada com sucesso, Redirecionando.");
         setTimeout(() => {
-          navigate(`/getStarted/createInstitution/${res.data?.id}`);
+          setOpenFinalWrapper(true);
         }, 3000);
       })
       .catch((err: AxiosError) => {
-        toast.error(err.response?.data?.message);
+        if (err.response?.data?.message)
+          toast.error(err.response?.data?.message);
+        else toast.error(err.code + " " + err.message);
       });
     setLoading(false);
   };
 
   return (
-    <div className={Styles.CreateContainer}>
-      <WelcomeHeader who="Dados da Instituição" />
+    <>
+      <div className={Styles.CreateContainer}>
+        <WelcomeHeader who="Dados da Instituição" />
 
-      <div className={Styles.formContainer}>
-        <form onSubmit={handleSubmit}>
-          <fieldset className={Styles.institutionFormFieldset}>
-            <legend>Instituição</legend>
+        <div className={Styles.formContainer}>
+          <form onSubmit={handleSubmit(onSubmit)}>
+            <fieldset className={Styles.institutionFormFieldset}>
+              <legend>Instituição</legend>
 
-            <div className={Styles.twoLayout}>
-              <div className="elements2">
-                <input
-                  type="text"
-                  name="name"
-                  id="name"
-                  value={institutionData.name}
-                  required
-                  onChange={(e) =>
-                    setInstitutionData({
-                      ...institutionData,
-                      name: e.target.value,
-                    })
-                  }
-                />
-                <label htmlFor="name">Nome</label>
+              <div className={Styles.twoLayout}>
+                <div className="elements2">
+                  <input {...register("name")} />
+                  <label htmlFor="name">Nome</label>
+                  <span>{errors.name?.message}</span>
+                </div>
+
+                <div className="elements2">
+                  <select
+                    defaultValue={InstitutionSize.SMALL}
+                    {...register("size")}
+                  >
+                    <option value="TINY">Muito Pequena</option>
+                    <option value="SMALL">Pequena</option>
+                    <option value="MEDIUM">Média</option>
+                    <option value="BIG">Grande</option>
+                    <option value="VERYBIG">Muito Grande</option>
+                    <option value="EXTRABIG">Extra Grande</option>
+                  </select>
+                  <label htmlFor="tamanho">Tamanho</label>
+                  <span>{errors.size?.message}</span>
+                </div>
               </div>
 
-              <div className="elements2">
-                <select
-                  name="tamanho"
-                  id="tamanho"
-                  required
-                  defaultValue={InstitutionSize.SMALL}
-                  onChange={(e) =>
-                    setInstitutionData({
-                      ...institutionData,
-                      size: InstitutionSize[e.target.value],
-                    })
-                  }
-                >
-                  <option value="TINY">Muito Pequena</option>
-                  <option value="SMALL">Pequena</option>
-                  <option value="MEDIUM">Média</option>
-                  <option value="BIG">Grande</option>
-                  <option value="VERYBIG">Muito Grande</option>
-                  <option value="EXTRABIG">Extra Grande</option>
-                </select>
-                <label htmlFor="tamanho">Tamanho</label>
-              </div>
-            </div>
+              <div className={Styles.twoLayout}>
+                <div className="elements2">
+                  <input
+                    type="number"
+                    id="nifNumber"
+                    {...register("nifNumber")}
+                  />
+                  <label htmlFor="nif">NIF/Número</label>
+                  <span>{errors.nifNumber?.message}</span>
+                </div>
 
-            <div className={Styles.twoLayout}>
-              <div className="elements2">
-                <input
-                  type="number"
-                  name="nifNumber"
-                  id="nifNumber"
-                  pattern="[0-9]*"
-                  required
-                  value={institutionData.nifNumber}
-                  onChange={(e) =>
-                    setInstitutionData({
-                      ...institutionData,
-                      nifNumber: e.target.value,
-                    })
-                  }
-                />
-                <label htmlFor="nif">NIF/Número</label>
+                <div className="elements2">
+                  <input
+                    type="email"
+                    id="enterprise_email"
+                    {...register("email")}
+                  />
+                  <label htmlFor="enterprise_email">Enterprise E-mail</label>
+                  <span>{errors.email?.message}</span>
+                </div>
+              </div>
+            </fieldset>
+
+            <fieldset className={Styles.institutionFormFieldset}>
+              <legend>Endereço</legend>
+
+              <div className={Styles.oneLayout}>
+                <input type="text" {...register("address")} />
+                <label htmlFor="endereco_1">Endereço 1</label>
+                <span>{errors.address?.message}</span>
               </div>
 
-              <div className="elements2">
-                <input
-                  type="email"
-                  name="enterprise_email"
-                  id="enterprise_email"
-                  required
-                  value={contacts.email}
-                  onChange={(e) =>
-                    setContacts({ ...contacts, email: e.target.value })
-                  }
-                />
-                <label htmlFor="enterprise_email">Enterprise E-mail</label>
+              <div className={Styles.twoLayout}>
+                <div className="elements2">
+                  <input type="text" id="cidade" {...register("state")} />
+                  <label>Cidade</label>
+                  <span>{errors.state?.message}</span>
+                </div>
+
+                <div className="elements2">
+                  <input type="text" id="provincia" {...register("province")} />
+                  <label htmlFor="provincia">Província</label>
+                  <span>{errors.province?.message}</span>
+                </div>
               </div>
-            </div>
-          </fieldset>
+              <div className={Styles.twoLayout}>
+                <div className="elements2">
+                  <input
+                    type="text"
+                    id="bairro"
+                    {...register("neighborhood")}
+                  />
+                  <label htmlFor="bairro">Bairro</label>
+                  <span>{errors.neighborhood?.message}</span>
+                </div>
 
-          <fieldset className={Styles.institutionFormFieldset}>
-            <legend>Endereço</legend>
-
-            <div className={Styles.oneLayout}>
-              <input
-                type="text"
-                name="endereco_1"
-                required
-                value={institutionAddress.address}
-                onChange={(e) =>
-                  setInstituionAddress({
-                    ...institutionAddress,
-                    address: e.target.value,
-                  })
-                }
-              />
-              <label htmlFor="endereco_1">Endereço 1</label>
-            </div>
-
-            <div className={Styles.twoLayout}>
-              <div className="elements2">
-                <input
-                  type="text"
-                  name="cidade"
-                  id="cidade"
-                  required
-                  value={institutionAddress.state}
-                  onChange={(e) =>
-                    setInstituionAddress({
-                      ...institutionAddress,
-                      state: e.target.value,
-                    })
-                  }
-                />
-                <label>Cidade</label>
+                <div className="elements2">
+                  <input type="text" id="municipio" {...register("county")} />
+                  <label htmlFor="municipio">Município</label>
+                  <span>{errors.county?.message}</span>
+                </div>
               </div>
+              <div className={Styles.twoLayout}>
+                <div className="elements2">
+                  <input type="number" id="telefone" {...register("phone")} />
+                  <label htmlFor="telefone">Telefone</label>
+                  <span>{errors.phone?.message}</span>
+                </div>
 
-              <div className="elements2">
-                <input
-                  type="text"
-                  name="provincia"
-                  id="provincia"
-                  required
-                  value={institutionAddress.province}
-                  onChange={(e) =>
-                    setInstituionAddress({
-                      ...institutionAddress,
-                      province: e.target.value,
-                    })
-                  }
-                />
-                <label htmlFor="provincia">Província</label>
+                <div className="elements2">
+                  <input
+                    type="number"
+                    id="telefone_alternativo"
+                    {...register("altPhone")}
+                  />
+                  <label htmlFor="telefone_alternativo">
+                    Telefone - Alternativo
+                  </label>
+                  <span>{errors.altPhone?.message}</span>
+                </div>
               </div>
-            </div>
-            <div className={Styles.twoLayout}>
-              <div className="elements2">
-                <input
-                  type="text"
-                  name="bairro"
-                  id="bairro"
-                  value={institutionAddress.neighborhood}
-                  onChange={(e) =>
-                    setInstituionAddress({
-                      ...institutionAddress,
-                      neighborhood: e.target.value,
-                    })
-                  }
-                />
-                <label htmlFor="bairro">Bairro</label>
+            </fieldset>
+
+            <fieldset className={Styles.institutionFormFieldset}>
+              <legend>Descrição</legend>
+
+              <div className={Styles.oneLayout}>
+                <div id="description">
+                  <textarea {...register("description")}></textarea>
+                </div>
+                <span>{errors.description?.message}</span>
               </div>
 
-              <div className="elements2">
-                <input
-                  type="text"
-                  name="municipio"
-                  id="municipio"
-                  value={institutionAddress.county}
-                  onChange={(e) =>
-                    setInstituionAddress({
-                      ...institutionAddress,
-                      county: e.target.value,
-                    })
-                  }
-                />
-                <label htmlFor="municipio">Município</label>
-              </div>
-            </div>
-            <div className={Styles.twoLayout}>
-              <div className="elements2">
-                <input
-                  type="number"
-                  name="telefone"
-                  id="telefone"
-                  required
-                  value={contacts.phone}
-                  onChange={(e) =>
-                    setContacts({
-                      ...contacts,
-                      phone: e.target.value,
-                    })
-                  }
-                />
-                <label htmlFor="telefone">Telefone</label>
-              </div>
-
-              <div className="elements2">
-                <input
-                  type="number"
-                  name="telefone_alternativo"
-                  id="telefone_alternativo"
-                  value={contacts.alternativePhone}
-                  onChange={(e) =>
-                    setContacts({
-                      ...contacts,
-                      alternativePhone: e.target.value,
-                    })
-                  }
-                  required
-                />
-                <label htmlFor="telefone_alternativo">
-                  Telefone - Alternativo
-                </label>
-              </div>
-            </div>
-          </fieldset>
-
-          <fieldset className={Styles.institutionFormFieldset}>
-            <legend>Descrição</legend>
-
-            <div className={Styles.oneLayout}>
-              <div id="description">
-                <textarea
-                  name="description"
-                  value={institutionData.description}
-                  onChange={(e) =>
-                    setInstitutionData({
-                      ...institutionData,
-                      description: e.target.value,
-                    })
-                  }
-                ></textarea>
-              </div>
-            </div>
-
-            {/* <Link to="/getStarted/superUserLogin">Próximo</Link> */}
-            <button type="submit" disabled={loading}>
-              {" "}
-              Próximo{" "}
-            </button>
-          </fieldset>
-        </form>
+              <button type="submit" disabled={loading}>
+                Próximo
+              </button>
+            </fieldset>
+          </form>
+        </div>
       </div>
-    </div>
+
+      <FinalWrappers open={openFinalWrapper} />
+    </>
   );
 };
 
