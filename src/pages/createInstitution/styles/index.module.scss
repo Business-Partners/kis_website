@@ -1,0 +1,400 @@
+$primary: #348888;
+$white: #ffffff;
+$gray: #cccccc;
+$black: #000000;
+$black60: rgba(0, 0, 0, 0.6);
+$blackText: #333333;
+$bgInput: rgba(204, 204, 204, 0.3);
+$labelGray: #949292;
+
+.wrapper {
+  width: 100%;
+  height: 100vh;
+  min-width: 1024px;
+  min-height: 600px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.mainContainer {
+  display: flex;
+  width: 65%;
+  max-width: 900px;
+  height: 100%;
+  background: $white;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  overflow: auto;
+
+  &::-webkit-scrollbar {
+    width: 6px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    border-radius: 20px;
+    background: $labelGray;
+  }
+}
+
+.secondContainer {
+  width: 35%;
+  height: 100%;
+  background: $gray;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  img {
+    width: 80%;
+  }
+}
+
+.InitialPageContainer {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+
+  img {
+    width: 134px;
+    height: 135px;
+    margin-bottom: 15px;
+  }
+
+  > h1 {
+    color: $primary;
+    font-weight: 700;
+    font-size: 64px;
+    line-height: 1;
+    font-style: normal;
+  }
+
+  > h4 {
+    font-weight: 700;
+    font-size: 24px;
+    color: $black;
+    line-height: 2;
+  }
+
+  > div {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    margin-top: 75px;
+
+    a {
+      width: 300px;
+      height: 40px;
+      background: $primary;
+      border: 1px solid transparent;
+      margin: 7px auto;
+      border-radius: 5px;
+
+      color: $white;
+      font-weight: bold;
+      font-size: 16px;
+      line-height: 19px;
+      text-align: center;
+
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      &:hover {
+        cursor: pointer;
+      }
+    }
+  }
+
+  > footer {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px;
+  }
+
+  > footer u {
+    font-style: normal;
+    font-weight: 700;
+    font-size: 14px;
+    color: $black;
+  }
+
+  > footer p {
+    font-style: normal;
+    font-weight: 700;
+    font-size: 14px;
+    color: $black;
+  }
+}
+
+.HeaderContainer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  padding: 20px;
+  width: 100%;
+
+  > header {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    strong {
+      margin-left: 14px;
+      font-size: 16px;
+      line-height: 19px;
+      font-style: normal;
+      font-weight: 700;
+      text-align: center;
+      color: $blackText;
+    }
+
+    > div {
+      display: flex;
+      align-items: center;
+
+      img {
+        width: 48px;
+        padding-right: 14px;
+        padding-right: 14px;
+        border-right: 1px solid $black;
+      }
+    }
+  }
+
+  > div {
+    margin-top: 90px;
+
+    strong {
+      font-size: 20px;
+      color: $black;
+    }
+  }
+}
+
+.CreateContainer {
+  width: 100%;
+  height: 100%;
+}
+
+.formContainer {
+  padding: 30px;
+  width: 100%;
+
+  > form {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+
+    input,
+    select,
+    textarea {
+      height: 40px;
+      border-radius: 5px;
+      background: $bgInput;
+      min-width: 90px;
+      border: 1px solid transparent;
+      margin: 15px 0 4px;
+      width: 100%;
+      padding: 2px 4px 2px 15px;
+    }
+
+    textarea {
+      height: 123px;
+      padding-top: 15px;
+    }
+
+    label {
+      line-height: 16px;
+      font-style: normal;
+      font-weight: 700;
+      font-size: 14px;
+      color: $labelGray;
+      margin: 3px 0 15px;
+      display: block;
+    }
+
+    a,
+    button {
+      border: none;
+      border-radius: 4px;
+      background-color: $primary;
+      color: $white;
+      font-style: normal;
+      font-weight: 700;
+      font-size: 16px;
+      margin: 20px auto;
+      width: 300px;
+      height: 40px;
+
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all 0.4s;
+
+      :hover {
+        background: $white;
+        color: $primary;
+        border: 1px solid $primary;
+      }
+
+      :disabled {
+        background: #323232;
+        color: #f7f7f7;
+        opacity: 0.6;
+        cursor: none;
+      }
+    }
+
+    span {
+      color: #9e0303;
+      font-size: 12px;
+      font-weight: 500;
+      line-height: 1.5;
+    }
+  }
+}
+
+.institutionFormFieldset {
+  display: flex;
+  flex-direction: column;
+  border: none;
+  width: 100%;
+  margin: 10px auto;
+
+  > legend {
+    font-style: normal;
+    font-weight: 700;
+    font-size: 20px;
+    color: $blackText;
+  }
+}
+
+.superUserLoginFormFieldset {
+  display: flex;
+  flex-direction: column;
+  width: 367px;
+  margin: 10px auto;
+  border: none;
+
+  > legend {
+    font-weight: 700;
+    font-size: 20px;
+    text-align: center;
+    color: &$blackText;
+  }
+
+  > .oneLayout {
+    margin-top: 20px;
+  }
+}
+
+.oneLayout {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+
+  > div[id="description"] {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    width: 100%;
+
+    input {
+      height: 107px;
+    }
+  }
+
+  div[class="element1"] {
+    width: 100%;
+  }
+}
+
+.twoLayout {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+
+  > div {
+    display: flex;
+    flex-direction: column;
+  }
+
+  div[class="elements2"] {
+    width: 48%;
+    position: relative;
+
+    label[class="dateNasc"] {
+      margin: 0;
+      position: absolute;
+      top: -10px;
+    }
+  }
+}
+
+.threeLayout {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  > div {
+    display: flex;
+    flex-direction: column;
+  }
+
+  div[id="name"] {
+    width: 48%;
+  }
+
+  div[id="tamanho"] {
+    width: 23%;
+  }
+
+  div[id="funcionarios"] {
+    width: 23%;
+  }
+  div[class="elements3"] {
+    width: 32%;
+  }
+
+  div[class="genero_container"] {
+    width: 20%;
+
+    select[id="genero"] {
+      width: 100%;
+    }
+  }
+
+  div[class="superUser_email_container"] {
+    width: 45%;
+
+    input[id="superUser_email"] {
+      width: 100%;
+    }
+  }
+}
