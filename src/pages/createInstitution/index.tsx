@@ -3,8 +3,6 @@ import { Navigate, Route, Routes } from "react-router-dom";
 import { WelcomeRightImage } from "../../assets";
 import CreateInstitution from "./createInstitution";
 import WelcomeInitialPage from "./initial";
-import InstitutionLoginData from "./InstitutionLogin";
-import KeepRegister from "./keepRegister";
 import Styles from "./styles/index.module.scss";
 
 const Welcome: React.FC = () => {

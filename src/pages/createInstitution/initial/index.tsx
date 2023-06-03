@@ -1,6 +1,6 @@
 import React from "react";
-import { logo } from "../../../assets";
 import { Link } from "react-router-dom";
+import { logo } from "../../../assets";
 import Styles from "../styles/index.module.scss";
 
 const WelcomeInitialPage: React.FC = () => {
