@@ -8,7 +8,7 @@ export const AboutContainer = styled(ViewContainer)`
   > div {
     width: 100%;
     display: flex;
-    aling-items: center;
+    align-items: center;
     justify-content: space-between;
     margin: 15px 0;
 

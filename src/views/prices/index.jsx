@@ -1,6 +1,6 @@
-import { PriceCard, PriceContainer } from "./styles";
-import { ContainerHeading } from "../styles";
 import { Link } from "react-router-dom";
+import { ContainerHeading } from "../styles";
+import { PriceCard, PriceContainer } from "./styles";
 
 function Prices() {
   return (

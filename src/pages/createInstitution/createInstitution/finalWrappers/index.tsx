@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
-import { logo, WelcomeRightImage } from "../../../../assets";
+import { WelcomeRightImage, logo } from "../../../../assets";
 import { WrapperAlmostDone } from "../styles";
 
 const FinalWrappers: React.FC<{ open: boolean }> = ({ open }) => {

@@ -17,6 +17,7 @@ import {
   InstitutionData,
   InstitutionSize,
 } from "./types";
+
 type FormData = Yup.InferType<typeof schema>;
 
 const CreateInstitution: React.FC = () => {
@@ -80,7 +81,7 @@ const CreateInstitution: React.FC = () => {
 
   const CreateInstitution = async () => {
     await api
-      .post("/institution", {
+      .post("/i", {
         institutionData,
         institutionContacts,
         institutionAddress,
@@ -92,10 +93,12 @@ const CreateInstitution: React.FC = () => {
           setOpenFinalWrapper(true);
         }, 3000);
       })
-      .catch((err: AxiosError) => {
-        if (err.response?.data?.message)
+      .catch((err) => {
+        if (err instanceof AxiosError) {
           toast.error(err.response?.data?.message);
-        else toast.error(err.code + " " + err.message);
+        } else {
+          toast.error(err.code + " " + err.message);
+        }
       });
     setLoading(false);
   };
